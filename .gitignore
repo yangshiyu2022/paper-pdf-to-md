@@ -1,0 +1,20 @@
+# Secrets and local credentials
+*.json
+!references/**/*.json
+.env
+
+# Python and generated conversion artifacts
+__pycache__/
+*.py[cod]
+*.bak
+*.md.bak
+*.lock
+review/
+*_review/
+*.paper-pdf-*.json
+
+# Local model/runtime directories
+models/
+runtime/
+.venv/
+venv/
