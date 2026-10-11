@@ -45,4 +45,4 @@ Register the daily 08:00 task:
 scripts\register_daily_ingest_task.ps1 -Library $env:PAPER_LIBRARY_ROOT
 ```
 
-The scheduled task uses local MinerU only. It moves a unique PDF into `09_待规范命名` after conversion succeeds and saves Markdown in `09_待规范命名MD`. Exact SHA-256 and DOI duplicates are skipped; possible title or filename matches are left in Downloads for review. The task logs each run under the library's `_paper_pdf_to_md` directory.
+The scheduled task uses local MinerU only. It retries failed conversions twice, moves a unique PDF into `09_待规范命名` after conversion succeeds and saves Markdown in `09_待规范命名MD`. Exact SHA-256 and DOI duplicates are skipped; possible title or filename matches are left in Downloads for review. The task logs each run under the library's `_paper_pdf_to_md` directory.

@@ -2,6 +2,7 @@ param(
   [int]$WindowHours = 24,
   [string]$Downloads = "",
   [string]$Library = "",
+  [int]$Retries = 2,
   [switch]$Cloud,
   [switch]$DryRun,
   [switch]$CopySource
@@ -27,7 +28,7 @@ if (-not (Test-Path -LiteralPath $Script)) { throw "Ingest script not found: $Sc
 if ([string]::IsNullOrWhiteSpace($Library)) { $Library = $env:PAPER_LIBRARY_ROOT }
 if ([string]::IsNullOrWhiteSpace($Library)) { throw "Pass -Library or set PAPER_LIBRARY_ROOT." }
 
-$argsList = @($Script, "--window-hours", $WindowHours, "--library", $Library)
+$argsList = @($Script, "--window-hours", $WindowHours, "--library", $Library, "--retries", $Retries)
 if ($Downloads) { $argsList += @("--downloads", $Downloads) }
 if ($Cloud) { $argsList += "--cloud" }
 if ($DryRun) { $argsList += "--dry-run" }

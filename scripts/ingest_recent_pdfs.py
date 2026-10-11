@@ -232,6 +232,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--copy-source", action="store_true", help="Copy successful imports instead of moving them.")
     parser.add_argument("--min-signals", type=int, default=2)
+    parser.add_argument("--retries", type=int, default=2, help="Additional conversion attempts after the first failure.")
     return parser.parse_args(argv)
 
 
@@ -322,10 +323,18 @@ def main(argv: list[str] | None = None) -> int:
                        "--review-dir", str(review_dir), "--language", args.language]
             if not args.cloud:
                 command.append("--force-local")
-            proc = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace", check=False)
-            item["converter_exit_code"] = proc.returncode
-            item["converter_stderr"] = (proc.stderr or "")[-2000:]
-            if proc.returncode != 0 or not md_path.exists() or md_path.stat().st_size == 0:
+            attempts = max(0, args.retries) + 1
+            proc = None
+            for attempt in range(1, attempts + 1):
+                proc = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace", check=False)
+                item["conversion_attempts"] = attempt
+                item["converter_exit_code"] = proc.returncode
+                item["converter_stderr"] = (proc.stderr or "")[-2000:]
+                if proc.returncode == 0 and md_path.exists() and md_path.stat().st_size > 0:
+                    break
+                if attempt < attempts:
+                    time.sleep(min(30, 2 ** attempt))
+            if proc is None or proc.returncode != 0 or not md_path.exists() or md_path.stat().st_size == 0:
                 item["status"] = "conversion-failed"
                 summary["items"].append(item)
                 continue

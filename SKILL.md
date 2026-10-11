@@ -39,7 +39,7 @@ $env:PAPER_LIBRARY_ROOT = "E:\Agentwork\codex\Thesispaper\paper\参考文献\参
 scripts\register_daily_ingest_task.ps1 -Library $env:PAPER_LIBRARY_ROOT
 ```
 
-Run `scripts\ingest_recent_pdfs.ps1 -Library $env:PAPER_LIBRARY_ROOT -DryRun` first to preview candidates. The task uses local MinerU, moves a unique PDF into `09_待规范命名` only after Markdown conversion succeeds, and writes Markdown beneath `09_待规范命名MD`. Exact-hash and DOI duplicates are skipped; title or filename matches are flagged as suspected duplicates. Suspected duplicates and files that cannot confidently be classified remain in Downloads and are recorded in the report. It does not delete duplicates or upload documents to the cloud.
+Run `scripts\ingest_recent_pdfs.ps1 -Library $env:PAPER_LIBRARY_ROOT -DryRun` first to preview candidates. The task uses local MinerU, retries each failed conversion twice by default, moves a unique PDF into `09_待规范命名` only after Markdown conversion succeeds, and writes Markdown beneath `09_待规范命名MD`. Exact-hash and DOI duplicates are skipped; title or filename matches are flagged as suspected duplicates. Suspected duplicates and files that cannot confidently be classified remain in Downloads and are recorded in the report. It does not delete duplicates or upload documents to the cloud.
 
 ## Review requirements
 

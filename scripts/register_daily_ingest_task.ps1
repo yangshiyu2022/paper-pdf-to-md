@@ -3,6 +3,7 @@ param(
   [string]$At = "08:00",
   [int]$WindowHours = 24,
   [string]$Library = "",
+  [int]$Retries = 2,
   [switch]$Cloud,
   [switch]$CopySource
 )
@@ -12,7 +13,7 @@ $Ingest = Join-Path $PSScriptRoot "ingest_recent_pdfs.ps1"
 if (-not (Test-Path -LiteralPath $Ingest)) { throw "Ingest wrapper not found: $Ingest" }
 if ([string]::IsNullOrWhiteSpace($Library)) { $Library = $env:PAPER_LIBRARY_ROOT }
 if ([string]::IsNullOrWhiteSpace($Library)) { throw "Pass -Library or set PAPER_LIBRARY_ROOT before registering the task." }
-$arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$Ingest`" -WindowHours $WindowHours -Library `"$Library`""
+$arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$Ingest`" -WindowHours $WindowHours -Library `"$Library`" -Retries $Retries"
 if ($Cloud) { $arguments += " -Cloud" }
 if ($CopySource) { $arguments += " -CopySource" }
 $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument $arguments
