@@ -29,3 +29,20 @@ Alternatively create `%USERPROFILE%\.codex\secrets\mineru-api.json` (keep it out
 ```
 
 Cloud conversion uploads the PDF. Use `scripts\convert_paper_pdf.ps1` when the PDF must remain local.
+
+## Daily intake (Windows)
+
+Preview PDFs created or modified in the last 24 hours:
+
+```powershell
+$env:PAPER_LIBRARY_ROOT = "E:\Agentwork\codex\Thesispaper\paper\参考文献\参考文献（全部）"
+scripts\ingest_recent_pdfs.ps1 -Library $env:PAPER_LIBRARY_ROOT -DryRun
+```
+
+Register the daily 08:00 task:
+
+```powershell
+scripts\register_daily_ingest_task.ps1 -Library $env:PAPER_LIBRARY_ROOT
+```
+
+The scheduled task uses local MinerU only. It moves a unique PDF into `09_待规范命名` after conversion succeeds and saves Markdown in `09_待规范命名MD`. Exact SHA-256 and DOI duplicates are skipped; possible title or filename matches are left in Downloads for review. The task logs each run under the library's `_paper_pdf_to_md` directory.

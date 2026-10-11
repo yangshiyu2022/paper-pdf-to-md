@@ -30,6 +30,17 @@ scripts\doctor.py
 
 Set `MINERU_PYTHON` to the Python executable in the environment where MinerU is installed, or set `MINERU_RUNTIME` to that environment's root. Provision the local pipeline models before the first local conversion. The local backend writes a Markdown file, a JSON sidecar, page/text review evidence, and retained image assets.
 
+## Daily literature intake
+
+To install a Windows task that runs daily at 08:00 and checks only PDFs created or modified in the previous 24 hours:
+
+```powershell
+$env:PAPER_LIBRARY_ROOT = "E:\Agentwork\codex\Thesispaper\paper\参考文献\参考文献（全部）"
+scripts\register_daily_ingest_task.ps1 -Library $env:PAPER_LIBRARY_ROOT
+```
+
+Run `scripts\ingest_recent_pdfs.ps1 -Library $env:PAPER_LIBRARY_ROOT -DryRun` first to preview candidates. The task uses local MinerU, moves a unique PDF into `09_待规范命名` only after Markdown conversion succeeds, and writes Markdown beneath `09_待规范命名MD`. Exact-hash and DOI duplicates are skipped; title or filename matches are flagged as suspected duplicates. Suspected duplicates and files that cannot confidently be classified remain in Downloads and are recorded in the report. It does not delete duplicates or upload documents to the cloud.
+
 ## Review requirements
 
 MinerU's Markdown and UniMERNet formula LaTeX are model output. Read the sidecar and `text_review.json`, inspect flagged crops, and verify formulas or tables used in downstream claims against the source PDF. Do not promise perfect OCR or formula recovery.

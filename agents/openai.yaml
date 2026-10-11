@@ -1,4 +1,4 @@
 interface:
   display_name: "PDF to Markdown with MinerU"
   short_description: "Convert PDFs to reviewable Markdown with cloud or local MinerU."
-  default_prompt: "Use $paper-pdf-to-md to convert this local PDF to Markdown. If no MinerU API key is configured, tell me where to register and use local MinerU compute only."
+  default_prompt: "Use $paper-pdf-to-md to convert this local PDF to Markdown, or ingest likely research PDFs downloaded in the last 24 hours. If no MinerU API key is configured, tell me where to register and use local MinerU compute only."
